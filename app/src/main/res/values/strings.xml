@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PDF转电子书</string>
+    <string name="import_pdf">导入PDF</string>
+    <string name="documents">文档</string>
+    <string name="settings">设置</string>
+    <string name="processing">处理中</string>
+    <string name="preview">预览</string>
+    <string name="export">导出</string>
+    <string name="api_config">API配置</string>
+    <string name="start_processing">开始处理</string>
+    <string name="select_pdf_file">选择PDF文件</string>
+    <string name="ocr_settings">识别设置</string>
+    <string name="ai_processing">AI处理</string>
+    <string name="output_settings">输出设置</string>
+    <string name="ocr_engine">OCR引擎</string>
+    <string name="ocr_language">OCR语言</string>
+    <string name="enable_ai_optimization">启用AI优化</string>
+    <string name="watermark_filter">水印过滤</string>
+    <string name="image_enhancement">图片增强</string>
+    <string name="chart_recognition">图表识别</string>
+    <string name="output_format">输出格式</string>
+    <string name="quality_level">质量级别</string>
+    <string name="configuration_name">配置名称</string>
+    <string name="api_provider">API提供商</string>
+    <string name="api_key">API Key</string>
+    <string name="base_url">Base URL</string>
+    <string name="model_version">模型版本</string>
+    <string name="max_tokens">Max Tokens</string>
+    <string name="temperature">Temperature</string>
+    <string name="priority">优先级</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
+    <string name="add">添加</string>
+</resources>
