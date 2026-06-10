@@ -3,12 +3,12 @@
 # OCR - Tesseract
 -keep class com.googlecode.tesseract.android.** { *; }
 
-# PDF处理
--keep class com.itextpdf.** { *; }
--keep class org.apache.pdfbox.** { *; }
+# PDF处理 - 使用Android原生API
+# -keep class com.itextpdf.** { *; }
+# -keep class org.apache.pdfbox.** { *; }
 
-# EPUB生成
--keep class nl.siegmann.epublib.** { *; }
+# EPUB生成 - 使用原生实现
+# -keep class nl.siegmann.epublib.** { *; }
 
 # Retrofit & OkHttp
 -keepattributes Signature
