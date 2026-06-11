@@ -2,6 +2,7 @@ package com.pdf2ebook.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.pdf2ebook.model.APIConfig
 import com.pdf2ebook.model.Document
 import com.pdf2ebook.model.PageContent
@@ -12,8 +13,9 @@ import com.pdf2ebook.model.PageContent
 @Database(
     entities = [APIConfig::class, Document::class, PageContent::class],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun apiConfigDao(): APIConfigDao
     abstract fun documentDao(): DocumentDao
