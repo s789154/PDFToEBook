@@ -27,6 +27,7 @@ data class APIConfig(
 /**
  * API提供商枚举
  */
+@Serializable
 enum class APIProvider(val displayName: String, val defaultBaseUrl: String) {
     OPENAI("OpenAI", "https://api.openai.com/v1"),
     ANTHROPIC("Anthropic", "https://api.anthropic.com/v1"),

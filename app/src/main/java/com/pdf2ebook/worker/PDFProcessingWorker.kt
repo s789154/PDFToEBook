@@ -60,42 +60,44 @@ class PDFProcessingWorker @AssistedInject constructor(
         const val STAGE_COMPLETED = "处理完成"
     }
 
-    override suspend fun doWork(): Result = try {
-        val documentId = inputData.getLong(KEY_DOCUMENT_ID, -1)
-        val pdfUriString = inputData.getString(KEY_PDF_URI) ?: return Result.failure()
+    override suspend fun doWork(): Result {
+        return try {
+            val documentId = inputData.getLong(KEY_DOCUMENT_ID, -1)
+            val pdfUriString = inputData.getString(KEY_PDF_URI) ?: return Result.failure()
 
-        if (documentId == -1L) return Result.failure()
+            if (documentId == -1L) return Result.failure()
 
-        // 发送初始化进度
-        updateProgress(STAGE_INITIALIZING, 0, 0, 0)
+            // 发送初始化进度
+            updateProgress(STAGE_INITIALIZING, 0, 0, 0)
 
-        // 更新文档状态为处理中
-        documentDao.updateStatus(documentId, ProcessingStatus.PROCESSING)
+            // 更新文档状态为处理中
+            documentDao.updateStatus(documentId, ProcessingStatus.PROCESSING)
 
-        // 获取文档和设置
-        val document = documentDao.getDocumentById(documentId) ?: return Result.failure()
-        val settings = document.settings
+            // 获取文档和设置
+            val document = documentDao.getDocumentById(documentId) ?: return Result.failure()
+            val settings = document.settings
 
-        // 初始化OCR引擎
-        ocrProcessor.initialize(settings.ocrEngine, settings.ocrLanguage)
+            // 初始化OCR引擎
+            ocrProcessor.initialize(settings.ocrEngine, settings.ocrLanguage)
 
-        // 处理PDF
-        processPDF(documentId, Uri.parse(pdfUriString), settings)
+            // 处理PDF
+            processPDF(documentId, Uri.parse(pdfUriString), settings)
 
-        // 更新文档状态为已完成
-        documentDao.updateStatus(documentId, ProcessingStatus.COMPLETED)
-        
-        // 发送完成进度
-        updateProgress(STAGE_COMPLETED, 100, 0, 0)
+            // 更新文档状态为已完成
+            documentDao.updateStatus(documentId, ProcessingStatus.COMPLETED)
+            
+            // 发送完成进度
+            updateProgress(STAGE_COMPLETED, 100, 0, 0)
 
-        Result.success()
-    } catch (e: Exception) {
-        Log.e("PDFProcessingWorker", "处理失败", e)
-        val documentId = inputData.getLong(KEY_DOCUMENT_ID, -1)
-        if (documentId != -1L) {
-            documentDao.updateStatus(documentId, ProcessingStatus.FAILED)
+            Result.success()
+        } catch (e: Exception) {
+            Log.e("PDFProcessingWorker", "处理失败", e)
+            val documentId = inputData.getLong(KEY_DOCUMENT_ID, -1)
+            if (documentId != -1L) {
+                documentDao.updateStatus(documentId, ProcessingStatus.FAILED)
+            }
+            Result.failure()
         }
-        Result.failure()
     }
     
     /**

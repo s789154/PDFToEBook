@@ -10,6 +10,7 @@ import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.pow
 
 /**
  * 图像处理工具类
@@ -70,11 +71,13 @@ class ImageUtils @Inject constructor(
         var pixelCount = 0
         var colorVariance = 0.0
 
-        val pixels = IntArray(rect.width() * rect.height())
+        val rectWidth = rect.width()
+        val rectHeight = rect.height()
+        val pixels = IntArray(rectWidth * rectHeight)
         bitmap.getPixels(
-            pixels, 0, rect.width(),
+            pixels, 0, rectWidth,
             rect.left, rect.top,
-            rect.width(), rect.height()
+            rectWidth, rectHeight
         )
 
         var avgColor = 0L
@@ -112,7 +115,7 @@ class ImageUtils @Inject constructor(
             style = Paint.Style.FILL
         }
 
-        canvas.drawRect(region, paint)
+        canvas.drawRect(RectF(region.left.toFloat(), region.top.toFloat(), region.right.toFloat(), region.bottom.toFloat()), paint)
         return result
     }
 
@@ -120,8 +123,8 @@ class ImageUtils @Inject constructor(
      * 获取区域周围的颜色
      */
     private fun getSurroundingColor(bitmap: Bitmap, region: Rect): Int {
-        val width = bitmap.width
-        val height = bitmap.height
+        val bitmapWidth = bitmap.width
+        val bitmapHeight = bitmap.height
         var redSum = 0L
         var greenSum = 0L
         var blueSum = 0L
@@ -130,13 +133,13 @@ class ImageUtils @Inject constructor(
         // 采样周围10像素
         val sampleDistance = 10
         val left = maxOf(0, region.left - sampleDistance)
-        val right = minOf(width, region.right + sampleDistance)
+        val right = minOf(bitmapWidth, region.right + sampleDistance)
         val top = maxOf(0, region.top - sampleDistance)
-        val bottom = minOf(height, region.bottom + sampleDistance)
+        val bottom = minOf(bitmapHeight, region.bottom + sampleDistance)
 
         for (x in left until right) {
             for (y in top until bottom) {
-                if (!region.contains(x, y)) {
+                if (x < region.left || x >= region.right || y < region.top || y >= region.bottom) {
                     val pixel = bitmap.getPixel(x, y)
                     redSum += Color.red(pixel)
                     greenSum += Color.green(pixel)
@@ -335,7 +338,7 @@ class ImageUtils @Inject constructor(
                     getGrayValue(bitmap.getPixel(x, y + 1)) -
                     4 * center
                 )
-                variance += kotlin.math.pow(laplacian - mean, 2.0)
+                variance += (laplacian - mean).pow(2.0)
             }
         }
 

@@ -13,10 +13,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import androidx.work.WorkInfo
 import com.pdf2ebook.ui.components.PDFProcessingProgress
@@ -33,7 +33,7 @@ fun ProcessingProgressScreen(
     onCompleted: () -> Unit,
     viewModel: ProcessingProgressViewModel = hiltViewModel()
 ) {
-    val workInfo by viewModel.workInfo.collectAsState()
+    val workInfo by viewModel.workInfo.collectAsState(initial = null)
     
     // 监听处理状态
     LaunchedEffect(workInfo) {
@@ -212,13 +212,13 @@ class ProcessingProgressViewModel @Inject constructor(
     // private val workManager: WorkManager
 ) : ViewModel() {
     
-    var workInfo by mutableStateOf<WorkInfo?>(null)
-        private set
+    private val _workInfo = MutableStateFlow<WorkInfo?>(null)
+    val workInfo: StateFlow<WorkInfo?> = _workInfo.asStateFlow()
     
     init {
         // 监听工作状态
         // workManager.getWorkInfoByIdLiveData(workId).observeForever {
-        //     workInfo = it
+        //     _workInfo.value = it
         // }
     }
 }

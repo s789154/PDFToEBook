@@ -1,5 +1,6 @@
 package com.pdf2ebook.network
 
+import com.pdf2ebook.model.APIConfig
 import com.pdf2ebook.model.APIProvider
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

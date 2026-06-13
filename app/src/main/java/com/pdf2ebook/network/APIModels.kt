@@ -27,7 +27,7 @@ data class Message(
 data class Function(
     val name: String,
     val description: String,
-    val parameters: Map<String, Any>
+    val parameters: Map<String, String>
 )
 
 /**

@@ -108,21 +108,13 @@ class OCRProcessor @Inject constructor(
 
         api.setImage(bitmap)
         val text = api.utF8Text
-        val confidence = api.meanConfidence / 100f
+        val confidence = api.meanConfidence() / 100f
 
-        // 获取单词级别的识别结果
-        val words = api.words.map { rect ->
-            WordResult(
-                text = rect.second,
-                rect = rect.first,
-                confidence = confidence
-            )
-        }
-
+        // 简化实现，不处理单词级别的识别
         return OCRResult(
             text = text,
             confidence = confidence,
-            words = words
+            words = emptyList()
         )
     }
 
